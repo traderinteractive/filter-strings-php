@@ -22,17 +22,6 @@ final class EmailTest extends TestCase
     /**
      * @test
      * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value '1' is not a string
-     * @covers ::filter
-     */
-    public function filterNonString()
-    {
-        Email::filter(1);
-    }
-
-    /**
-     * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
      * @expectedExceptionMessage Value '@email.com' is not a valid email
      * @covers ::filter
      */

@@ -26,45 +26,20 @@ final class Strings
      * @throws FilterException if the value did not pass validation.
      * @throws \InvalidArgumentException if one of the parameters was not correctly typed.
      */
-    public static function filter($value, bool $allowNull = false, int $minLength = 1, int $maxLength = PHP_INT_MAX)
-    {
-        if ($minLength < 0) {
-            throw new \InvalidArgumentException('$minLength was not a positive integer value');
-        }
+    public static function filter(
+        string $value = null,
+        bool $allowNull = false,
+        int $minLength = 1,
+        int $maxLength = PHP_INT_MAX
+    ) {
+        self::validateMinimumLength($minLength);
+        self::validateMaximumLength($maxLength);
 
-        if ($maxLength < 0) {
-            throw new \InvalidArgumentException('$maxLength was not a positive integer value');
-        }
-
-        if ($allowNull === true && $value === null) {
+        if (self::valueIsNullAndValid($allowNull, $value)) {
             return null;
         }
 
-        if (is_scalar($value)) {
-            $value = "{$value}";
-        }
-
-        if (is_object($value) && method_exists($value, '__toString')) {
-            $value = (string)$value;
-        }
-
-        if (!is_string($value)) {
-            throw new FilterException("Value '" . var_export($value, true) . "' is not a string");
-        }
-
-        $valueLength = strlen($value);
-
-        if ($valueLength < $minLength || $valueLength > $maxLength) {
-            throw new FilterException(
-                sprintf(
-                    "Value '%s' with length '%d' is less than '%d' or greater than '%d'",
-                    $value,
-                    $valueLength,
-                    $minLength,
-                    $maxLength
-                )
-            );
-        }
+        self::validateStringLength($value, $minLength, $maxLength);
 
         return $value;
     }
@@ -89,5 +64,44 @@ final class Strings
         }
 
         return explode($delimiter, $value);
+    }
+
+    private static function validateMinimumLength(int $minLength)
+    {
+        if ($minLength < 0) {
+            throw new \InvalidArgumentException('$minLength was not a positive integer value');
+        }
+    }
+
+    private static function validateMaximumLength(int $maxLength)
+    {
+        if ($maxLength < 0) {
+            throw new \InvalidArgumentException('$maxLength was not a positive integer value');
+        }
+    }
+
+    private static function validateStringLength(string $value = null, int $minLength, int $maxLength)
+    {
+        $valueLength = strlen($value);
+        if ($valueLength < $minLength || $valueLength > $maxLength) {
+            throw new FilterException(
+                sprintf(
+                    "Value '%s' with length '%d' is less than '%d' or greater than '%d'",
+                    $value,
+                    $valueLength,
+                    $minLength,
+                    $maxLength
+                )
+            );
+        }
+    }
+
+    private static function valueIsNullAndValid(bool $allowNull, string $value = null) : bool
+    {
+        if ($allowNull === false && $value === null) {
+            throw new FilterException('Value failed filtering, $allowNull is set to false');
+        }
+
+        return $allowNull === true && $value === null;
     }
 }

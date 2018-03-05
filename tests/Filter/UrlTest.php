@@ -22,7 +22,7 @@ final class UrlTest extends TestCase
     /**
      * @test
      * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value '1' is not a string
+     * @expectedExceptionMessage Value '1' is not a valid url
      * @covers ::filter
      */
     public function filterNonString()
@@ -53,7 +53,7 @@ final class UrlTest extends TestCase
     /**
      * @test
      * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value 'NULL' is not a string
+     * @expectedExceptionMessage Value failed filtering, $allowNull is set to false
      * @covers ::filter
      */
     public function filterNullFail()

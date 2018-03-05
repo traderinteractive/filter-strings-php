@@ -1,7 +1,5 @@
 # filter-strings-php
 
-A filtering implementation for verifying correct data and performing typical modifications to data.
-
 [![Build Status](https://travis-ci.org/traderinteractive/filter-strings-php.svg?branch=master)](https://travis-ci.org/traderinteractive/filter-strings-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/traderinteractive/filter-strings-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/traderinteractive/filter-strings-php/?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/traderinteractive/filter-strings-php/badge.svg?branch=master)](https://coveralls.io/github/traderinteractive/filter-strings-php?branch=master)
@@ -14,30 +12,21 @@ A filtering implementation for verifying correct data and performing typical mod
 [![Daily Downloads](https://poser.pugx.org/traderinteractive/filter-strings/d/daily)](https://packagist.org/packages/traderinteractive/filter-strings)
 [![Monthly Downloads](https://poser.pugx.org/traderinteractive/filter-strings/d/monthly)](https://packagist.org/packages/traderinteractive/filter-strings)
 
-## Features
+A filtering implementation for verifying the contents of strings and some common formats of strings.
 
-TO DO
+## Requirements
 
-## Example
+Requires PHP 7.0 or newer and uses composer to install further PHP dependencies.  See the [composer specification](composer.json) for more details.
 
-TO DO
+## Installation
 
-## Composer
-
-To add the library as a local, per-project dependency use [Composer](http://getcomposer.org)! Simply add a dependency on
-`traderinteractive/filter-strings` to your project's `composer.json` file such as:
-
+filter-floats-php can be installed for use in your project using [composer](http://getcomposer.org).
+The recommended way of using this library in your project is to add a `composer.json` file to your project.  The following contents would add filter-floats-php as a dependency:
 ```sh
-composer require traderinteractive/filter-strings
+composer require traderinteractive/filter-floats
 ```
 
-## Documentation
-
-TO DO
-
-#### Specification
-
-TODO
+### Functionality
 
 #### Strings::filter
 Aliased in the filterer as `string`, this filter verifies that the argument is a string.  The second parameter can be set to `true` to allow

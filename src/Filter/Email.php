@@ -20,17 +20,18 @@ final class Email
      *
      * @throws FilterException if the value did not pass validation.
      */
-    public static function filter($value) : string
+    public static function filter(string $value) : string
     {
-        if (!is_string($value)) {
-            throw new FilterException("Value '" . var_export($value, true) . "' is not a string");
-        }
+        return self::validateEmail($value);
+    }
 
+    private static function validateEmail(string $value) : string
+    {
         $filteredEmail = filter_var($value, FILTER_VALIDATE_EMAIL);
         if ($filteredEmail === false) {
             throw new FilterException("Value '{$value}' is not a valid email");
         }
-
+        
         return $filteredEmail;
     }
 }

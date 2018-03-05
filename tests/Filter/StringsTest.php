@@ -51,13 +51,13 @@ final class StringsTest extends TestCase
      */
     public function filterNullPass()
     {
-        $this->assertSame(null, Strings::filter(null, true));
+        $this->assertNull(Strings::filter(null, true));
     }
 
     /**
      * @test
      * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value 'NULL' is not a string
+     * @expectedExceptionMessage Value failed filtering, $allowNull is set to false
      * @covers ::filter
      */
     public function filterNullFail()
@@ -146,6 +146,38 @@ final class StringsTest extends TestCase
     public function filterMaxLengthNegative()
     {
         Strings::filter('a', false, 1, -1);
+    }
+
+    /**
+     * @test
+     * @covers ::filter
+     */
+    public function filterWithScalar()
+    {
+        $this->assertSame('24141', Strings::filter(24141));
+    }
+
+    /**
+     * @test
+     * @covers ::filter
+     */
+    public function filterWithObject()
+    {
+        $testObject = new class() {
+            private $data;
+
+            public function __construct()
+            {
+                $this->data = [1,2,3,4,5];
+            }
+
+            public function __toString()
+            {
+                return implode(',', $this->data);
+            }
+        };
+
+        $this->assertSame('1,2,3,4,5', Strings::filter(/** @scrutinizer ignore-type */new $testObject));
     }
 
     /**
