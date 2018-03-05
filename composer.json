@@ -1,0 +1,27 @@
+{
+    "name": "traderinteractive/filter-strings",
+    "description": "A filtering implementation for verifying strings",
+    "keywords": [
+        "utility",
+        "strings",
+        "string",
+        "email",
+        "url"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "license": "MIT",
+    "require": {
+        "php": "^7.0",
+        "traderinteractive/exceptions": "^1.0"
+    },
+    "require-dev": {
+        "php-coveralls/php-coveralls": "^1.0",
+        "phpunit/phpunit": "^6.0",
+        "squizlabs/php_codesniffer": "^3.2"
+    },
+    "autoload": {
+        "psr-4": { "TraderInteractive\\": "src/" }
+    }
+}
