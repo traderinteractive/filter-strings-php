@@ -20,46 +20,55 @@ Requires PHP 7.0 or newer and uses composer to install further PHP dependencies.
 
 ## Installation
 
-filter-floats-php can be installed for use in your project using [composer](http://getcomposer.org).
-The recommended way of using this library in your project is to add a `composer.json` file to your project.  The following contents would add filter-floats-php as a dependency:
+filter-strings-php can be installed for use in your project using [composer](http://getcomposer.org).
+The recommended way of using this library in your project is to add a `composer.json` file to your project.  The following contents would add filter-strings-php as a dependency:
+
 ```sh
-composer require traderinteractive/filter-floats
+composer require traderinteractive/filter-strings
 ```
 
 ### Functionality
 
 #### Strings::filter
-Aliased in the filterer as `string`, this filter verifies that the argument is a string.  The second parameter can be set to `true` to allow
+
+This filter verifies that the argument is a string.  The second parameter can be set to `true` to allow
 null values through without an error (they will stay null and not get converted to false).  The last parameters specify the length bounds of the
 string. The default bounds are 1+, so an empty string fails by default.
 
 The following checks that `$value` is a non-empty string.
+
 ```php
 \TraderInteractive\Filter\Strings::filter($value);
 ```
 
 #### Strings::explode
-Aliased in the filterer as `explode`, this filter is essentially a wrapper around the built-in [`explode`](http://www.php.net/explode) method
+
+This filter is essentially a wrapper around the built-in [`explode`](http://www.php.net/explode) method
 with the value first in order to work with the `Filterer`.  It also defaults to using `,` as a delimiter.  For example:
+
 ```php
 $value = \TraderInteractive\Filter\Strings::explode('abc,def,ghi');
 assert($value === ['abc', 'def', 'ghi']);
 ```
 
 #### Url::filter
-Aliased in the filterer as `url`, this filter verifies that the argument is a URL string according to
+
+This filter verifies that the argument is a URL string according to
 [RFC2396](http://www.faqs.org/rfcs/rfc2396). The second parameter can be set to `true` to allow
 null values through without an error (they will stay null and not get converted to false).
 
 The following checks that `$value` is a URL.
+
 ```php
 \TraderInteractive\Filter\Url::filter($value);
 ```
 
 #### Email::filter
-Aliased in the filterer as `email`, this filter verifies that the argument is an email.
+
+This filter verifies that the argument is an email.
 
 The following checks that `$value` is an email.
+
 ```php
 \TraderInteractive\Filter\Email::filter($value);
 ```
