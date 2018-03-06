@@ -3,6 +3,7 @@
 namespace TraderInteractive\Filter;
 
 use TraderInteractive\Exceptions\FilterException;
+use TypeError;
 
 /**
  * A collection of filters for strings.
@@ -39,9 +40,8 @@ final class Strings
             return null;
         }
 
-        self::checkIfScalarAndConvert($value);
-        self::checkIfObjectAndConvert($value);
-        self::validateIfObjectIsAString($value);
+        $value = self::enforceValueCanBeCastAsString($value);
+
         self::validateStringLength($value, $minLength, $maxLength);
 
         return $value;
@@ -129,5 +129,20 @@ final class Strings
         if (!is_string($value)) {
             throw new FilterException("Value '" . var_export($value, true) . "' is not a string");
         }
+    }
+
+    private static function enforceValueCanBeCastAsString($value)
+    {
+        try {
+            $value = (
+                function (string $str) : string {
+                    return $str;
+                }
+            )($value);
+        } catch (TypeError $te) {
+            throw new FilterException(sprintf("Value '%s' is not a string", var_export($value, true)));
+        }
+
+        return $value;
     }
 }
