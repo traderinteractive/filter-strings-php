@@ -24,11 +24,13 @@ final class Url
      *
      * @throws FilterException if the value did not pass validation.
      */
-    public static function filter(string $value = null, bool $allowNull = false)
+    public static function filter($value = null, bool $allowNull = false)
     {
         if (self::valueIsNullAndValid($allowNull, $value)) {
             return null;
         }
+
+        self::validateString($value);
 
         return self::filterUrl($value);
     }
@@ -43,12 +45,19 @@ final class Url
         return $filteredUrl;
     }
 
-    private static function valueIsNullAndValid(bool $allowNull, string $value = null) : bool
+    private static function valueIsNullAndValid(bool $allowNull, $value = null) : bool
     {
         if ($allowNull === false && $value === null) {
             throw new FilterException('Value failed filtering, $allowNull is set to false');
         }
 
         return $allowNull === true && $value === null;
+    }
+
+    private static function validateString($value)
+    {
+        if (!is_string($value)) {
+            throw new FilterException("Value '" . var_export($value, true) . "' is not a string");
+        }
     }
 }

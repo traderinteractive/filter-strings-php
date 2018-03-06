@@ -27,7 +27,7 @@ final class Strings
      * @throws \InvalidArgumentException if one of the parameters was not correctly typed.
      */
     public static function filter(
-        string $value = null,
+        $value = null,
         bool $allowNull = false,
         int $minLength = 1,
         int $maxLength = PHP_INT_MAX
@@ -39,6 +39,9 @@ final class Strings
             return null;
         }
 
+        self::checkIfScalarAndConvert($value);
+        self::checkIfObjectAndConvert($value);
+        self::validateIfObjectIsAString($value);
         self::validateStringLength($value, $minLength, $maxLength);
 
         return $value;
@@ -96,12 +99,33 @@ final class Strings
         }
     }
 
-    private static function valueIsNullAndValid(bool $allowNull, string $value = null) : bool
+    private static function valueIsNullAndValid(bool $allowNull, $value = null) : bool
     {
         if ($allowNull === false && $value === null) {
             throw new FilterException('Value failed filtering, $allowNull is set to false');
         }
 
         return $allowNull === true && $value === null;
+    }
+
+    private static function checkIfScalarAndConvert(&$value)
+    {
+        if (is_scalar($value)) {
+            $value = (string)$value;
+        }
+    }
+
+    private static function checkIfObjectAndConvert(&$value)
+    {
+        if (is_object($value) && method_exists($value, '__toString')) {
+            $value = (string)$value;
+        }
+    }
+
+    private static function validateIfObjectIsAString($value)
+    {
+        if (!is_string($value)) {
+            throw new FilterException("Value '" . var_export($value, true) . "' is not a string");
+        }
     }
 }

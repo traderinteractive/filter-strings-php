@@ -177,7 +177,28 @@ final class StringsTest extends TestCase
             }
         };
 
-        $this->assertSame('1,2,3,4,5', Strings::filter(/** @scrutinizer ignore-type */new $testObject));
+        $this->assertSame('1,2,3,4,5', Strings::filter(new $testObject));
+    }
+
+    /**
+     * @test
+     * @covers ::filter
+     *
+     * @expectedException \TraderInteractive\Exceptions\FilterException
+     * @expectedExceptionMessage Value 'class@anonymous
+     */
+    public function filterWithObjectNoToStringMethod()
+    {
+        $testObject = new class() {
+            private $data;
+
+            public function __construct()
+            {
+                $this->data = [1, 2, 3, 4, 5];
+            }
+        };
+
+        Strings::filter(new $testObject);
     }
 
     /**

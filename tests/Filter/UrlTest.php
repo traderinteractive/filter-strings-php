@@ -22,7 +22,7 @@ final class UrlTest extends TestCase
     /**
      * @test
      * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value '1' is not a valid url
+     * @expectedExceptionMessage Value '1' is not a string
      * @covers ::filter
      */
     public function filterNonString()
