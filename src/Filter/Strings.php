@@ -58,8 +58,10 @@ final class Strings
      *
      * @throws \InvalidArgumentException if the delimiter does not pass validation.
      */
-    public static function explode(string $value, string $delimiter = ',')
+    public static function explode($value, string $delimiter = ',')
     {
+        self::validateIfObjectIsAString($value);
+
         if (empty($delimiter)) {
             throw new \InvalidArgumentException(
                 "Delimiter '" . var_export($delimiter, true) . "' is not a non-empty string"

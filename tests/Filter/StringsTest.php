@@ -224,6 +224,17 @@ final class StringsTest extends TestCase
     }
 
     /**
+     * @test
+     * @expectedException \TraderInteractive\Exceptions\FilterException
+     * @expectedExceptionMessage Value '1234' is not a string
+     * @covers ::explode
+     */
+    public function explodeNonString()
+    {
+        Strings::explode(1234, '');
+    }
+
+    /**
      * Verifies explode filter with an empty delimiter.
      *
      * @test
