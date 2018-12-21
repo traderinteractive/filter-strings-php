@@ -246,4 +246,24 @@ final class StringsTest extends TestCase
     {
         Strings::explode('test', '');
     }
+
+    /**
+     * @test
+     * @covers ::stripTags
+     */
+    public function stripTagsFromNullReturnsNull()
+    {
+        $this->assertNull(Strings::stripTags(null));
+    }
+
+    /**
+     * @test
+     * @covers ::stripTags
+     */
+    public function stripTagsRemoveHtmlFromString()
+    {
+        $actual = Strings::stripTags('A string with <p>paragraph</p> tags');
+        $expected = 'A string with paragraph tags';
+        $this->assertSame($expected, $actual);
+    }
 }
