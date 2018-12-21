@@ -71,6 +71,23 @@ final class Strings
         return explode($delimiter, $value);
     }
 
+    /**
+     * Strip HTML and PHP tags from a string. Unlike the strip_tags function this method will return null if a null
+     * value is given. The native php function will return an empty string.
+     *
+     * @param string|null $value The input string
+     *
+     * @return string|null
+     */
+    public static function stripTags(string $value = null)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return strip_tags($value);
+    }
+
     private static function validateMinimumLength(int $minLength)
     {
         if ($minLength < 0) {
