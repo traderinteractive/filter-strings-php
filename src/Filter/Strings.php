@@ -127,13 +127,6 @@ final class Strings
         return $allowNull === true && $value === null;
     }
 
-    private static function checkIfObjectAndConvert(&$value)
-    {
-        if (is_object($value) && method_exists($value, '__toString')) {
-            $value = (string)$value;
-        }
-    }
-
     private static function validateIfObjectIsAString($value)
     {
         if (!is_string($value)) {
