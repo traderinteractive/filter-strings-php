@@ -8,6 +8,7 @@ use TraderInteractive\Exceptions\FilterException;
 
 /**
  * @coversDefaultClass \TraderInteractive\Filter\Strings
+ * @covers ::<private>
  */
 final class StringsTest extends TestCase
 {

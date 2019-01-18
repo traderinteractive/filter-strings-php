@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \TraderInteractive\Filter\Email
+ * @covers ::<private>
  */
 final class EmailTest extends TestCase
 {
