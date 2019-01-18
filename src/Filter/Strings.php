@@ -72,6 +72,23 @@ final class Strings
     }
 
     /**
+     * This filter prepends $prefix and appends $suffix to the string value.
+     *
+     * @param mixed  $value  The string value to which $prefix and $suffix will be added.
+     * @param string $prefix The value to prepend to the string.
+     * @param string $suffix The value to append to the string.
+     *
+     * @return string
+     *
+     * @throws FilterException Thrown if $value cannot be casted to a string.
+     */
+    public static function concat($value, string $prefix = '', string $suffix = '') : string
+    {
+        self::enforceValueCanBeCastAsString($value);
+        return "{$prefix}{$value}{$suffix}";
+    }
+
+    /**
      * Strip HTML and PHP tags from a string. Unlike the strip_tags function this method will return null if a null
      * value is given. The native php function will return an empty string.
      *

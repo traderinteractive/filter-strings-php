@@ -267,4 +267,45 @@ final class StringsTest extends TestCase
         $expected = 'A string with paragraph tags';
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * @test
+     * @covers ::concat
+     */
+    public function concat()
+    {
+        $this->assertSame('prefixstringsuffix', Strings::concat('string', 'prefix', 'suffix'));
+    }
+
+    /**
+     * Verify behavior of concat() when $value is not filterable
+     *
+     * @test
+     * @covers ::concat
+     * @expectedException \TraderInteractive\Exceptions\FilterException
+     *
+     * @return void
+     */
+    public function concatValueNotFilterable()
+    {
+        Strings::concat(new \StdClass(), 'prefix', 'suffix');
+    }
+
+    /**
+     * @test
+     * @covers ::concat
+     */
+    public function concatScalarValue()
+    {
+        $this->assertSame('prefix123suffix', Strings::concat(123, 'prefix', 'suffix'));
+    }
+
+    /**
+     * @test
+     * @covers ::concat
+     */
+    public function concatObjectValue()
+    {
+        $this->assertSame('prefix' . __FILE__ . 'suffix', Strings::concat(new \SplFileInfo(__FILE__), 'prefix', 'suffix'));
+    }
 }
