@@ -106,14 +106,9 @@ final class Strings
     {
         $valueLength = strlen($value);
         if ($valueLength < $minLength || $valueLength > $maxLength) {
+            $format = "Value '%s' with length '%d' is less than '%d' or greater than '%d'";
             throw new FilterException(
-                sprintf(
-                    "Value '%s' with length '%d' is less than '%d' or greater than '%d'",
-                    $value,
-                    $valueLength,
-                    $minLength,
-                    $maxLength
-                )
+                sprintf($format, $value, $valueLength, $minLength, $maxLength)
             );
         }
     }
