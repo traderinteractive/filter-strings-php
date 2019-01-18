@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \TraderInteractive\Filter\Url
+ * @covers ::<private>
  */
 final class UrlTest extends TestCase
 {
