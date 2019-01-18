@@ -127,13 +127,6 @@ final class Strings
         return $allowNull === true && $value === null;
     }
 
-    private static function checkIfScalarAndConvert(&$value)
-    {
-        if (is_scalar($value)) {
-            $value = (string)$value;
-        }
-    }
-
     private static function checkIfObjectAndConvert(&$value)
     {
         if (is_object($value) && method_exists($value, '__toString')) {
