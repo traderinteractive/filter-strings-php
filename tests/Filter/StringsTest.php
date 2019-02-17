@@ -203,6 +203,28 @@ final class StringsTest extends TestCase
     }
 
     /**
+     * @test
+     * @covers ::translate
+     */
+    public function translateValue()
+    {
+        $map = ['foo' => '100', 'bar' => '200'];
+        $this->assertSame('100', Strings::translate('foo', $map));
+    }
+
+    /**
+     * @test
+     * @covers ::translate
+     * @expectedException \TraderInteractive\Exceptions\FilterException
+     * @expectedExceptionMessage The value 'baz' was not found in the translation map array.
+     */
+    public function translateValueNotFoundInMap()
+    {
+        $map = ['foo' => '100', 'bar' => '200'];
+        Strings::translate('baz', $map);
+    }
+
+    /**
      * Verifies basic explode functionality.
      *
      * @test

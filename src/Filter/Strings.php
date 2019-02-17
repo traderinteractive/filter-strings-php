@@ -72,6 +72,23 @@ final class Strings
     }
 
     /**
+     * This filter takes the given string and translates it using the given value map.
+     *
+     * @param string $value    The string value to translate
+     * @param array  $valueMap Array of key value pairs where a key will match the given $value.
+     *
+     * @return string
+     */
+    public static function translate(string $value, array $valueMap) : string
+    {
+        if (!array_key_exists($value, $valueMap)) {
+            throw new FilterException("The value '{$value}' was not found in the translation map array.");
+        }
+
+        return $valueMap[$value];
+    }
+
+    /**
      * This filter prepends $prefix and appends $suffix to the string value.
      *
      * @param mixed  $value  The string value to which $prefix and $suffix will be added.

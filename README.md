@@ -47,6 +47,12 @@ This filter concatenates the given $value, $prefix and $suffix and returns the r
 $value = \TraderInteractive\Filter\Strings::concat('middle', 'begining_', '_end');
 assert($value === 'begining_middle_end');
 ```
+#### Strings::translate
+This filter will accept a string value and return its translated value found in the given $valueMap.
+```php
+$value = \TraderInteractive\Filter\Strings::translate('active', ['inactive' => 'X', 'active' => 'A']);
+assert($value === 'A');
+```
 
 #### Strings::explode
 
