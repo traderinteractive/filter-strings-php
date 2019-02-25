@@ -106,6 +106,38 @@ final class Strings
     }
 
     /**
+     * This filter replaces the given words with a replacement character.
+     *
+     * @param mixed          $value       The raw input to run the filter against.
+     * @param array|callable $words       The words to filter out.
+     * @param string         $replacement The character to replace the words with.
+     *
+     * @return string|null
+     *
+     * @throws FilterException Thrown when a bad value is encountered.
+     */
+    public static function redact(
+        $value,
+        $words,
+        string $replacement = ''
+    ) {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+
+        $stringValue = self::filter($value);
+        if (is_callable($words)) {
+            $words = $words();
+        }
+
+        if (is_array($words) === false) {
+            throw new FilterException("Words was not an array or a callable that returns an array");
+        }
+
+        return self::replaceWordsWithReplacementString($stringValue, $words, $replacement);
+    }
+
+    /**
      * Strip HTML and PHP tags from a string and, optionally, replace the tags with a string.
      * Unlike the strip_tags function, this method will return null if a null value is given.
      * The native php function will return an empty string.
@@ -184,5 +216,47 @@ final class Strings
         }
 
         return $value;
+    }
+
+    private static function replaceWordsWithReplacementString(string $value, array $words, string $replacement) : string
+    {
+        $matchingWords = self::getMatchingWords($words, $value);
+        if (count($matchingWords) === 0) {
+            return $value;
+        }
+
+        $replacements = self::generateReplacementsMap($matchingWords, $replacement);
+
+        return str_ireplace($matchingWords, $replacements, $value);
+    }
+
+    private static function getMatchingWords(array $words, string $value) : array
+    {
+        $matchingWords = [];
+        foreach ($words as $word) {
+            $escapedWord = preg_quote($word, '/');
+            $caseInsensitiveWordPattern = "/\b{$escapedWord}\b/i";
+            if (preg_match($caseInsensitiveWordPattern, $value)) {
+                $matchingWords[] = $word;
+            }
+        }
+
+        return $matchingWords;
+    }
+
+    private static function generateReplacementsMap(array $words, string $replacement) : array
+    {
+        $replacement = mb_substr($replacement, 0, 1);
+
+        return array_map(
+            function ($word) use ($replacement) {
+                if ($replacement === '') {
+                    return '';
+                }
+
+                return str_repeat($replacement, strlen($word));
+            },
+            $words
+        );
     }
 }
