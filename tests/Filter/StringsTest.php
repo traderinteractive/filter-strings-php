@@ -273,21 +273,65 @@ final class StringsTest extends TestCase
     /**
      * @test
      * @covers ::stripTags
+     * @dataProvider provideStripTags
+     *
+     * @param string|null $value
+     * @param string      $replacement
+     * @param string|null $expected
      */
-    public function stripTagsFromNullReturnsNull()
+    public function stripTags($value, string $replacement, $expected)
     {
-        $this->assertNull(Strings::stripTags(null));
+        $actual = Strings::stripTags($value, $replacement);
+        $this->assertSame($expected, $actual);
     }
 
     /**
-     * @test
-     * @covers ::stripTags
+     * @return array
      */
-    public function stripTagsRemoveHtmlFromString()
+    public function provideStripTags()
     {
-        $actual = Strings::stripTags('A string with <p>paragraph</p> tags');
-        $expected = 'A string with paragraph tags';
-        $this->assertSame($expected, $actual);
+        return [
+            'null returns null' => [
+                'value' => null,
+                'replacement' => '',
+                'expected' => null,
+            ],
+            'remove html from string' => [
+                'value' => 'A string with <p>paragraph</p> tags',
+                'replacement' => '',
+                'expected' => 'A string with paragraph tags',
+            ],
+            'remove xml and replace with space' => [
+                'value' => '<something>inner value</something>',
+                'replacement' => ' ',
+                'expected' => ' inner value ',
+            ],
+            'remove multiline html from string' => [
+                'value' => "<p\nclass='something'\nstyle='display:none'></p>",
+                'replacement' => ' ',
+                'expected' => '  ',
+            ],
+            'remove php tags' => [
+                'value' => '<?php some php code',
+                'replacement' => ' ',
+                'expected' => '',
+            ],
+            'remove shorthand php tags' => [
+                'value' => '<?= some php code ?> something else',
+                'replacement' => ' ',
+                'expected' => '  something else',
+            ],
+            'do not remove unmatched <' => [
+                'value' => '1 < 3',
+                'replacement' => ' ',
+                'expected' => '1 < 3',
+            ],
+            'do not remove unmatched >' => [
+                'value' => '3 > 1',
+                'replacement' => ' ',
+                'expected' => '3 > 1',
+            ],
+        ];
     }
 
     /**

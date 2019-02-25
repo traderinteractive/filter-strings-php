@@ -106,20 +106,28 @@ final class Strings
     }
 
     /**
-     * Strip HTML and PHP tags from a string. Unlike the strip_tags function this method will return null if a null
-     * value is given. The native php function will return an empty string.
+     * Strip HTML and PHP tags from a string and, optionally, replace the tags with a string.
+     * Unlike the strip_tags function, this method will return null if a null value is given.
+     * The native php function will return an empty string.
      *
-     * @param string|null $value The input string
+     * @param string|null $value       The input string.
+     * @param string      $replacement The string to replace the tags with. Defaults to an empty string.
      *
      * @return string|null
      */
-    public static function stripTags(string $value = null)
+    public static function stripTags(string $value = null, string $replacement = '')
     {
         if ($value === null) {
             return null;
         }
 
-        return strip_tags($value);
+        if ($replacement === '') {
+            return strip_tags($value);
+        }
+
+        $findTagEntities = '/<[^>]+?>/';
+        $valueWithReplacements = preg_replace($findTagEntities, $replacement, $value);
+        return strip_tags($valueWithReplacements); // use built-in as a safeguard to ensure tags are stripped
     }
 
     private static function validateMinimumLength(int $minLength)
