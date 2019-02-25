@@ -374,4 +374,131 @@ final class StringsTest extends TestCase
     {
         $this->assertSame('prefix' . __FILE__ . 'suffix', Strings::concat(new \SplFileInfo(__FILE__), 'prefix', 'suffix'));
     }
+
+    /**
+     * @test
+     * @covers ::redact
+     * @dataProvider provideRedact
+     *
+     * @param string|null    $value       The value to pass to the filter.
+     * @param array|callable $words       The words to pass to the filter.
+     * @param string         $replacement The replacement to pass to the filter.
+     * @param string|null    $expected    The expected result.
+     */
+    public function redact($value, $words, string $replacement, $expected)
+    {
+        $actual = Strings::redact($value, $words, $replacement);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public function provideRedact() : array
+    {
+        return [
+            'null value' => [
+                'value' => null,
+                'words' => [],
+                'replacement' => '',
+                'expected' => null,
+            ],
+            'empty string' => [
+                'value' => '',
+                'words' => [],
+                'replacement' => '',
+                'expected' => '',
+            ],
+            'replace with empty' => [
+                'value' => 'this message contains something that you want removed',
+                'words' => ['something that you want removed'],
+                'replacement' => '',
+                'expected' => 'this message contains ',
+            ],
+            'replace with *' => [
+                'value' => 'replace certain words that you might want to remove',
+                'words' => ['might', 'certain'],
+                'replacement' => '*',
+                'expected' => 'replace ******* words that you ***** want to remove',
+            ],
+            'replace with █' => [
+                'value' => 'redact specific dates and secret locations',
+                'words' => ['secret locations', 'specific dates'],
+                'replacement' => '█',
+                'expected' => 'redact ██████████████ and ████████████████',
+            ],
+            'replace with multi-character string uses first character' => [
+                'value' => 'replace some particular words',
+                'words' => ['particular', 'words', 'some'],
+                'replacement' => ' *** ',
+                'expected' => 'replace                      ',
+            ],
+            'no replacements' => [
+                'value' => 'some perfectly normal string',
+                'words' => ['undesired', 'words'],
+                'replacement' => '*',
+                'expected' => 'some perfectly normal string',
+            ],
+            'closure provides words' => [
+                'value' => 'doe a deer, a female deer',
+                'words' => function () {
+                    return ['doe', 'deer'];
+                },
+                'replacement' => '-',
+                'expected' => '--- a ----, a female ----',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @covers ::redact
+     * @dataProvider provideRedactFailsOnBadInput
+     *
+     * @param mixed  $value       The value to pass to the filter.
+     * @param mixed  $words       The words to pass to the filter.
+     * @param string $replacement The replacement to pass to the filter.
+     * @param string $exception   The exception to expect.
+     * @param string $message     The exception message to expect.
+     */
+    public function redactFailsOnBadInput($value, $words, string $replacement, string $exception, string $message)
+    {
+        $this->expectException($exception);
+        $this->expectExceptionMessage($message);
+
+        Strings::redact($value, $words, $replacement);
+    }
+
+    /**
+     * @return array
+     */
+    public function provideRedactFailsOnBadInput() : array
+    {
+        return [
+            'non-string value' => [
+                'value' => ['bad', 'input'],
+                'words' => [],
+                'replacement' => '',
+                'exception' => FilterException::class,
+                'message' => "Value '" . var_export(['bad', 'input'], true) . "' is not a string",
+            ],
+            'invalid words argument' => [
+                'value' => 'some string',
+                'words' => 'this is not valid',
+                'replacement' => '',
+                'exception' => FilterException::class,
+                'message' => 'Words was not an array or a callable that returns an array',
+            ],
+            'invalid return from callable words argument' => [
+                'value' => 'some string',
+                'words' => function () {
+                    return 'this is also not valid';
+                },
+                'replacement' => '',
+                'exception' => FilterException::class,
+                'message' => 'Words was not an array or a callable that returns an array',
+            ],
+        ];
+    }
 }
