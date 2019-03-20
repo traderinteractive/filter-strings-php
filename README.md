@@ -70,6 +70,11 @@ This filter trims and remove superfluous whitespace from a given string.
 $value = \TraderInteractive\Filter\Strings::compress(' a string    with lots of    whitespace   ');
 assert($value === 'a string with lots of whitespace');
 ```
+This filter can also replace vertical whitespace such as newlines with single spaces.
+```php
+$value = \TraderInteractive\Filter\Strings::compress(" a string\nwith lots\nof    \nnewlines\n   ", true);
+assert($value === 'a string with lots of newlines');
+```
 
 #### Url::filter
 

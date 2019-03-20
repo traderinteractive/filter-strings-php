@@ -106,19 +106,23 @@ final class Strings
     }
 
     /**
-     * This filter trims and removes superfluous whitespace from the given string
+     * This filter trims and removes superfluous whitespace characters from the given string.
      *
-     * @param string|null $value The string to compress.
+     * @param string|null $value                     The string to compress.
+     * @param bool        $replaceVerticalWhitespace Flag to replace vertical whitespace such as newlines with
+     *                                               single space.
      *
      * @return string|null
      */
-    public static function compress(string $value = null)
+    public static function compress(string $value = null, bool $replaceVerticalWhitespace = false)
     {
         if ($value === null) {
             return null;
         }
 
-        return trim(preg_replace('/\s+/', ' ', $value));
+        $pattern = $replaceVerticalWhitespace ? '\s+' : '\h+';
+
+        return trim(preg_replace("/{$pattern}/", ' ', $value));
     }
 
     /**
