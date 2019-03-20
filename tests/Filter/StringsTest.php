@@ -377,6 +377,50 @@ final class StringsTest extends TestCase
 
     /**
      * @test
+     * @covers ::compress
+     */
+    public function compressRemovesSuperfluousWhitespace()
+    {
+        $this->assertSame('a compressed string', Strings::compress('  a   compressed     string    '));
+    }
+
+    /**
+     * @test
+     * @covers ::compress
+     */
+    public function compressReturnsNullIfValueIsNull()
+    {
+        $this->assertNull(Strings::compress(null));
+    }
+
+    /**
+     * @test
+     * @covers ::compress
+     */
+    public function compressRemovesNewLines()
+    {
+        $input = " This string\nhas     superfluous   whitespace  and  \nnewlines\n";
+        $this->assertSame(
+            'This string has superfluous whitespace and newlines',
+            Strings::compress($input, true)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::compress
+     */
+    public function compressIgnoresNewLinesByDefault()
+    {
+        $input = " This string\nhas     superfluous   whitespace  and  \nnewlines\n";
+        $this->assertSame(
+            "This string\nhas superfluous whitespace and \nnewlines",
+            Strings::compress($input)
+        );
+    }
+
+    /**
+     * @test
      * @covers ::redact
      * @dataProvider provideRedact
      *
