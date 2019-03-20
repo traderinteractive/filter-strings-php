@@ -377,6 +377,24 @@ final class StringsTest extends TestCase
 
     /**
      * @test
+     * @covers ::compress
+     */
+    public function compressRemovesSuperfluousWhitespace()
+    {
+        $this->assertSame('a compressed string', Strings::compress('  a   compressed     string    '));
+    }
+
+    /**
+     * @test
+     * @covers ::compress
+     */
+    public function compressReturnsNullIfValueIsNull()
+    {
+        $this->assertNull(Strings::compress(null));
+    }
+
+    /**
+     * @test
      * @covers ::redact
      * @dataProvider provideRedact
      *

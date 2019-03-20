@@ -106,6 +106,22 @@ final class Strings
     }
 
     /**
+     * This filter trims and removes superfluous whitespace from the given string
+     *
+     * @param string|null $value The string to compress.
+     *
+     * @return string|null
+     */
+    public static function compress(string $value = null)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return trim(preg_replace('/\s+/', ' ', $value));
+    }
+
+    /**
      * This filter replaces the given words with a replacement character.
      *
      * @param mixed          $value       The raw input to run the filter against.

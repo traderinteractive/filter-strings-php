@@ -64,6 +64,13 @@ $value = \TraderInteractive\Filter\Strings::explode('abc,def,ghi');
 assert($value === ['abc', 'def', 'ghi']);
 ```
 
+#### Strings::compress
+This filter trims and remove superfluous whitespace from a given string.
+```php
+$value = \TraderInteractive\Filter\Strings::compress(' a string    with lots of    whitespace   ');
+assert($value === 'a string with lots of whitespace');
+```
+
 #### Url::filter
 
 This filter verifies that the argument is a URL string according to
