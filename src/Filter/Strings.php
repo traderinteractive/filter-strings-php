@@ -182,6 +182,26 @@ final class Strings
         return strip_tags($valueWithReplacements); // use built-in as a safeguard to ensure tags are stripped
     }
 
+    /**
+     * This filter ensures the given string $input matches the given regular expression pattern.
+     *
+     * @param string|null $input   The string value to filter.
+     * @param string      $pattern The PCRE pattern to match.
+     *
+     * @return string
+     *
+     * @throws FilterException
+     */
+    public static function match(string $input, string $pattern) : string
+    {
+        $matched = preg_match($pattern, $input);
+        if ($matched === 1) {
+            return $input;
+        }
+
+        throw new FilterException("The given string '$input' did not match the expression {$pattern}");
+    }
+
     private static function validateMinimumLength(int $minLength)
     {
         if ($minLength < 0) {

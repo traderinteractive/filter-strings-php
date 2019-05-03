@@ -548,4 +548,24 @@ final class StringsTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @test
+     * @covers ::match
+     * @expectedException \TraderInteractive\Exceptions\FilterException
+     * @expectedExceptionMessage The given string '123d' did not match the expression /^\d+$/
+     */
+    public function matchThrowsExceptionWhenInputDoesNotMatchExpression()
+    {
+        Strings::match('123d', '/^\d+$/');
+    }
+
+    /**
+     * @test
+     * @covers ::match
+     */
+    public function matchReturnsInputIfInputMatchesPattern()
+    {
+        $this->assertSame('123', Strings::match('123', '/^\d+$/'));
+    }
 }
