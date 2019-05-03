@@ -568,4 +568,54 @@ final class StringsTest extends TestCase
     {
         $this->assertSame('123', Strings::match('123', '/^\d+$/'));
     }
+
+    /**
+     * @test
+     * @covers ::extract
+     */
+    public function extractReturnsTheNamedSubpattern()
+    {
+        $pattern = '/(?P<name>\w+): (?P<year>\d+)/';
+        $input = 'foobar: 2008';
+        $this->assertSame('2008', Strings::extract($input, $pattern, 'year'));
+    }
+
+    /**
+     * @param string $input   The value to be filtered.
+     * @param string $pattern The pattern to use in the filter.
+     * @param string $name    The named subpattern to extract.
+     * @param string $message The expected exception message.
+     *
+     * @test
+     * @covers ::extract
+     * @dataProvider provideInvalidExtractData
+     */
+    public function extractFailures(string $input, string $pattern, string $name, string $message)
+    {
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage($message);
+        Strings::extract($input, $pattern, $name);
+    }
+
+    /**
+     * @return array
+     */
+    public function provideInvalidExtractData() : array
+    {
+        $pattern = '/(?P<name>\w+): (?P<year>\d+)/';
+        return [
+            'invalid sub pattern name' => [
+                'input' => 'Ford: 2019',
+                'pattern' => $pattern,
+                'name' => 'digit',
+                'message' => "The given named sub pattern 'digit' was not found in the expression {$pattern}",
+            ],
+            'input does not match pattern' => [
+                'input' => 'Ford: abc',
+                'pattern' => $pattern,
+                'name' => 'year',
+                'message' => "The given string 'Ford: abc' did not match the expression {$pattern}",
+            ],
+        ];
+    }
 }

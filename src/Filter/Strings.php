@@ -202,6 +202,36 @@ final class Strings
         throw new FilterException("The given string '$input' did not match the expression {$pattern}");
     }
 
+    /**
+     * This filter ensures the given string $input matches the given regular expression pattern and returns the found
+     * named subpattern.
+     *
+     * @param string|null $input   The string value to filter.
+     * @param string      $pattern The PCRE pattern to match.
+     * @param string      $name    The name of the sub pattern to extract.
+     *
+     * @return string
+     *
+     * @throws FilterException
+     */
+    public static function extract(string $input, string $pattern, string $name) : string
+    {
+        $matches = [];
+        $matched = preg_match($pattern, $input, $matches);
+        if ($matched === 0) {
+            throw new FilterException("The given string '$input' did not match the expression {$pattern}");
+        }
+
+        $value = $matches[$name] ?? null;
+        if ($value === null) {
+            throw new FilterException(
+                "The given named sub pattern '$name' was not found in the expression {$pattern}"
+            );
+        }
+
+        return $value;
+    }
+
     private static function validateMinimumLength(int $minLength)
     {
         if ($minLength < 0) {
