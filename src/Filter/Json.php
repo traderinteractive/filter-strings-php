@@ -91,13 +91,7 @@ final class Json
             return $value;
         }
 
-        if (!$shouldAllowNull && $value === null) {
-            throw new FilterException(self::ERROR_CANNOT_BE_NULL);
-        }
-
-        if (!is_string($value)) {
-            throw new FilterException(sprintf(self::ERROR_NOT_A_STRING, var_export($value, true)));
-        }
+        self::ensureValueIsString($value);
 
         $value = json_decode($value, $shouldDecodeToArray, $depth);
         $lastErrorCode = json_last_error();
@@ -107,5 +101,23 @@ final class Json
         }
 
         return $value;
+    }
+
+    /**
+     * Ensures that the value is a string.
+     *
+     * @param mixed $value The value to filter.
+     *
+     * @throws FilterException Thrown if the value is not a string.
+     */
+    private static function ensureValueIsString($value)
+    {
+        if ($value === null) {
+            throw new FilterException(self::ERROR_CANNOT_BE_NULL);
+        }
+
+        if (!is_string($value)) {
+            throw new FilterException(sprintf(self::ERROR_NOT_A_STRING, var_export($value, true)));
+        }
     }
 }
