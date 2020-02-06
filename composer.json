@@ -14,6 +14,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.0",
+        "ext-json": "*",
         "traderinteractive/exceptions": "^1.0"
     },
     "require-dev": {

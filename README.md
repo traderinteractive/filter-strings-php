@@ -98,6 +98,36 @@ The following checks that `$value` is an email.
 \TraderInteractive\Filter\Email::filter($value);
 ```
 
+#### Json::validate
+
+This filter verifies that the value is in a valid JSON format.
+
+The second parameter can be set to `true` to allow null values through without an error.
+
+The third parameter determines the maximum recursion depth that is allowed.
+
+The following checks that `$value` is a valid JSON string.
+
+```php
+\TraderInteractive\Filter\Json::validate($value);
+```
+
+#### Json::parse
+
+This filter parses a valid JSON string into an array, int, double, or bool. Invalid JSON will throw an error.
+
+The second parameter can be set to `true` to allow null values through without an error.
+
+The third parameter determines the maximum recursion depth that is allowed.
+
+The following checks that `$value` is a valid JSON string and parses it into an array.
+
+```php
+$value = '{ "string": "value", "array": [1, 2, 3] }';
+\TraderInteractive\Filter\Json::parse($value);
+assert($value === ['string' => 'value', 'array' => [1, 2, 3]]);
+```
+
 ## Contact
 
 Developers may be contacted at:
