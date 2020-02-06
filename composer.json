@@ -14,13 +14,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.0",
-        "ext-json": "*",
         "traderinteractive/exceptions": "^1.0"
     },
     "require-dev": {
+        "ext-json": "*",
         "php-coveralls/php-coveralls": "^2.0",
         "phpunit/phpunit": "^6.0",
         "squizlabs/php_codesniffer": "^3.2"
+    },
+    "suggest": {
+        "ext-json": "Required for JSON filters"
     },
     "autoload": {
         "psr-4": { "TraderInteractive\\": "src/" }
