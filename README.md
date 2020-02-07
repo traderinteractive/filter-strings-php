@@ -76,6 +76,30 @@ $value = \TraderInteractive\Filter\Strings::compress(" a string\nwith lots\nof  
 assert($value === 'a string with lots of newlines');
 ```
 
+#### Strings::redact
+
+This filter will remove specified words from a string or, optionally, replace each letter of the words with a replacement character.
+
+The second argument specifies the words that should be replaced and can either be an array of strings or a callable that returns an array of strings.
+
+The third argument specifies the replacement character. If empty, the words will be removed entirely. If a string with more than one character is provided, only the first character will be used.
+
+```php
+$value = \TraderInteractive\Filter\Strings::redact('a string with some unwanted words', ['unwanted', 'words'], '*');
+assert($value === 'a string with some ******** *****');
+```
+
+#### Strings::stripTags
+
+This filter will strip HTML, XML, and PHP tags from a string. This filter also accepts null values, which will be returned as null.
+
+The second, optional argument specifies a replacement string for the removed HTML and XML tags. PHP tags will be stripped without a replacement.
+
+```php
+\TraderInteractive\Filter\Strings::stripTags('<div>a string with<br/>tags</div>', ' ');
+assert($value === ' a string with tags ');
+```
+
 #### Url::filter
 
 This filter verifies that the argument is a URL string according to
