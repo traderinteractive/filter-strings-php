@@ -17,6 +17,7 @@
         "traderinteractive/exceptions": "^1.0"
     },
     "require-dev": {
+        "ext-SimpleXML": "*",
         "ext-json": "*",
         "ext-libxml": "*",
         "php-coveralls/php-coveralls": "^2.0",
@@ -25,7 +26,8 @@
     },
     "suggest": {
         "ext-json": "Required for JSON filters",
-        "ext-libxml": "Required for XML validation filters"
+        "ext-libxml": "Required for XML validation filters",
+        "ext-SimpleXML": "Required for XML filters"
     },
     "autoload": {
         "psr-4": { "TraderInteractive\\": "src/" }
