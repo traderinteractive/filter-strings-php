@@ -372,7 +372,10 @@ final class StringsTest extends TestCase
      */
     public function concatObjectValue()
     {
-        $this->assertSame('prefix' . __FILE__ . 'suffix', Strings::concat(new \SplFileInfo(__FILE__), 'prefix', 'suffix'));
+        $this->assertSame(
+            'prefix' . __FILE__ . 'suffix',
+            Strings::concat(new \SplFileInfo(__FILE__), 'prefix', 'suffix')
+        );
     }
 
     /**
