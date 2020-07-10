@@ -152,6 +152,89 @@ $value = '{ "string": "value", "array": [1, 2, 3] }';
 assert($value === ['string' => 'value', 'array' => [1, 2, 3]]);
 ```
 
+#### XmlFilter::filter
+
+This filter ensures the given string is valid XML.
+
+```php
+$value = "<root><outer><inner>value</inner></outer></root>";
+$filtered = \TraderInteractive\Filter\XmlFilter::filter($value);
+assert($value === $filtered);
+```
+
+#### XmlFilter::extract
+
+This filter accepts an XML string and an xpath. It will return the single element found at the xpath.
+
+```php
+$value = <<<XML
+<?xml version="1.0"?>
+<books> 
+    <book id="bk101">
+        <author>Gambardella, Matthew</author>
+        <title>XML Developers Guide</title>
+        <genre>Computer</genre>
+        <price>44.95</price>
+        <publish_date>2000-10-01</publish_date>
+        <description>An in-depth look at creating applications with XML.</description>
+    </book>
+    <book id="bk102">
+        <author>Ralls, Kim</author>
+        <title>Midnight Rain</title>
+        <genre>Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2000-12-16</publish_date>
+        <description>A former architect battles corporate zombies</description>
+    </book>
+</books>
+XML;
+$xpath = '//book[@id="bk102"]';
+
+$filtered = \TraderInteractive\Filter\XmlFilter::extract($value, $xpath);
+$expected = <<<XML
+<book id="bk102">
+    <author>Ralls, Kim</author>
+    <title>Midnight Rain</title>
+    <genre>Fantasy</genre>
+    <price>5.95</price>
+    <publish_date>2000-12-16</publish_date>
+    <description>A former architect battles corporate zombies</description>
+</book>
+XML;
+assert($filtered === $expected);
+```
+
+#### XmlFilter::validate
+
+This filter accepts an XML string and a filepath to an XSD. It ensures the given XML is valid using the given XSD and returns the original XML.
+
+```php
+$value = <<<XML
+<?xml version="1.0"?>
+<books> 
+    <book id="bk101">
+        <author>Gambardella, Matthew</author>
+        <title>XML Developers Guide</title>
+        <genre>Computer</genre>
+        <price>44.95</price>
+        <publish_date>2000-10-01</publish_date>
+        <description>An in-depth look at creating applications with XML.</description>
+    </book>
+    <book id="bk102">
+        <author>Ralls, Kim</author>
+        <title>Midnight Rain</title>
+        <genre>Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2000-12-16</publish_date>
+        <description>A former architect battles corporate zombies</description>
+    </book>
+</books>
+XML;
+$xsdFilePath = 'books.xsd';
+$filtered = \TraderInteractive\Filter\XmlFilter::validate($value, $xsdFilePath);
+assert($filtered === $value);
+```
+
 ## Contact
 
 Developers may be contacted at:
