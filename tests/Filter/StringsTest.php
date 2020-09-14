@@ -548,4 +548,28 @@ final class StringsTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @test
+     * @covers ::explode
+     */
+    public function explodeWithResultKeys()
+    {
+        $keys = ['optional', 'required'];
+        $input = 'abc-1';
+        $result = Strings::explode($input, '-', $keys);
+        $this->assertSame(['required' => '1', 'optional' => 'abc'], $result);
+    }
+
+    /**
+     * @test
+     * @covers ::explode
+     */
+    public function explodeWithResultKeysAndNullResult()
+    {
+        $keys = ['optional', 'required'];
+        $input = 'abc';
+        $result = Strings::explode($input, '-', $keys);
+        $this->assertSame(['required' => 'abc', 'optional' => null], $result);
+    }
 }

@@ -63,6 +63,11 @@ with the value first in order to work with the `Filterer`.  It also defaults to 
 $value = \TraderInteractive\Filter\Strings::explode('abc,def,ghi');
 assert($value === ['abc', 'def', 'ghi']);
 ```
+The filter can optionally be given keys to be used in the result. For example:
+```php
+$value = \TraderInteractive\Filter\Strings::explode('def,ghi', ',', ['foo', 'bar', 'baz']);
+assert($value === ['baz'=> 'ghi', 'bar' => 'def', 'foo' => null]);
+```
 
 #### Strings::compress
 This filter trims and remove superfluous whitespace from a given string.

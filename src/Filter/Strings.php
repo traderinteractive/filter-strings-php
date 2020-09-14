@@ -52,13 +52,15 @@ final class Strings
      *
      * For example, given the string 'foo,bar,baz', this would return the array ['foo', 'bar', 'baz'].
      *
-     * @param string $value The string to explode.
-     * @param string $delimiter The non-empty delimiter to explode on.
+     * @param string     $value     The string to explode.
+     * @param string     $delimiter The non-empty delimiter to explode on.
+     * @param array|null $keys      If provided the values from the exploded string will be assigned the given keys.
+     *
      * @return array The exploded values.
      *
      * @throws \InvalidArgumentException if the delimiter does not pass validation.
      */
-    public static function explode($value, string $delimiter = ',')
+    public static function explode($value, string $delimiter = ',', array $keys = null)
     {
         self::validateIfObjectIsAString($value);
 
@@ -68,7 +70,18 @@ final class Strings
             );
         }
 
-        return explode($delimiter, $value);
+        $values = explode($delimiter, $value);
+        if ($keys === null) {
+            return $values;
+        }
+
+        $result = [];
+        foreach (array_reverse($keys) as $key) {
+            $value = array_pop($values);
+            $result[$key] = $value;
+        }
+
+        return $result;
     }
 
     /**
