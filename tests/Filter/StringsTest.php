@@ -225,35 +225,49 @@ final class StringsTest extends TestCase
     }
 
     /**
-     * Verifies basic explode functionality.
+     * @param string   $value          The value to be filtered.
+     * @param array    $expectedResult The expected filter result.
+     * @param string   $delimiter      The delimiter to use.
      *
      * @test
      * @covers ::explode
+     * @dataProvider provideExplodeData
      */
-    public function explode()
-    {
-        $this->assertSame(['a', 'bcd', 'e'], Strings::explode('a,bcd,e'));
+    public function explode(
+        string $value,
+        array $expectedResult,
+        string $delimiter = ','
+    ) {
+        $actualResult = Strings::explode($value, $delimiter);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * Verifies explode with a custom delimiter.
-     *
-     * @test
-     * @covers ::explode
+     * @return array
      */
-    public function explodeCustomDelimiter()
+    public function provideExplodeData() : array
     {
-        $this->assertSame(['a', 'b', 'c', 'd,e'], Strings::explode('a b c d,e', ' '));
+        return [
+            [
+                'value' => 'a,bcd,e',
+                'result' => ['a', 'bcd', 'e'],
+            ],
+            [
+                'value' => 'a b c d,e',
+                'result' => ['a', 'b', 'c', 'd,e'],
+                'delimiter' => ' ',
+            ],
+        ];
     }
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value '1234' is not a string
      * @covers ::explode
      */
     public function explodeNonString()
     {
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage("Value '1234' is not a string");
         Strings::explode(1234, '');
     }
 
@@ -261,12 +275,12 @@ final class StringsTest extends TestCase
      * Verifies explode filter with an empty delimiter.
      *
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Delimiter '''' is not a non-empty string
      * @covers ::explode
      */
     public function explodeEmptyDelimiter()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Delimiter '''' is not a non-empty string");
         Strings::explode('test', '');
     }
 
