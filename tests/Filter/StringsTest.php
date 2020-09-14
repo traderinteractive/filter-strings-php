@@ -224,25 +224,39 @@ final class StringsTest extends TestCase
     }
 
     /**
-     * Verifies basic explode functionality.
+     * @param string   $value          The value to be filtered.
+     * @param array    $expectedResult The expected filter result.
+     * @param string   $delimiter      The delimiter to use.
      *
      * @test
      * @covers ::explode
+     * @dataProvider provideExplodeData
      */
-    public function explode()
-    {
-        $this->assertSame(['a', 'bcd', 'e'], Strings::explode('a,bcd,e'));
+    public function explode(
+        string $value,
+        array $expectedResult,
+        string $delimiter = ','
+    ) {
+        $actualResult = Strings::explode($value, $delimiter);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * Verifies explode with a custom delimiter.
-     *
-     * @test
-     * @covers ::explode
+     * @return array
      */
-    public function explodeCustomDelimiter()
+    public function provideExplodeData() : array
     {
-        $this->assertSame(['a', 'b', 'c', 'd,e'], Strings::explode('a b c d,e', ' '));
+        return [
+            [
+                'value' => 'a,bcd,e',
+                'result' => ['a', 'bcd', 'e'],
+            ],
+            [
+                'value' => 'a b c d,e',
+                'result' => ['a', 'b', 'c', 'd,e'],
+                'delimiter' => ' ',
+            ],
+        ];
     }
 
     /**
