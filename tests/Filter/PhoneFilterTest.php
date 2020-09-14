@@ -92,7 +92,7 @@ final class PhoneFilterTest extends TestCase
      * @param mixed $value The value to filter.
      *
      * @test
-     * @covers ::__invoke
+     * @covers ::filter
      * @dataProvider provideFilterThrowsException
      */
     public function filterThrowsException($value)
