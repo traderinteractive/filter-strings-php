@@ -228,6 +228,9 @@ final class StringsTest extends TestCase
      * @param string   $value          The value to be filtered.
      * @param array    $expectedResult The expected filter result.
      * @param string   $delimiter      The delimiter to use.
+     * @param int|null $padLength      The array length of the result.
+     * @param mixed    $padValue       The value to use when padding.
+     * @param string   $padType        The direction to pad the resulting array.
      *
      * @test
      * @covers ::explode
@@ -236,9 +239,12 @@ final class StringsTest extends TestCase
     public function explode(
         string $value,
         array $expectedResult,
-        string $delimiter = ','
+        string $delimiter = ',',
+        int $padLength = null,
+        $padValue = null,
+        string $padType = Strings::EXPLODE_PAD_RIGHT
     ) {
-        $actualResult = Strings::explode($value, $delimiter);
+        $actualResult = Strings::explode($value, $delimiter, $padLength, $padValue, $padType);
         $this->assertSame($expectedResult, $actualResult);
     }
 
@@ -257,7 +263,34 @@ final class StringsTest extends TestCase
                 'result' => ['a', 'b', 'c', 'd,e'],
                 'delimiter' => ' ',
             ],
+            [
+                'value' => 'a-b-c',
+                'result' => ['a', 'b', 'c', null, null],
+                'delimiter' => '-',
+                'padLength' => 5,
+                'padValue' => null,
+                'padType' => Strings::EXPLODE_PAD_RIGHT,
+            ],
+            [
+                'value' => 'a-b-c',
+                'result' => [null, null, 'a', 'b', 'c'],
+                'delimiter' => '-',
+                'padLength' => 5,
+                'padValue' => null,
+                'padType' => Strings::EXPLODE_PAD_LEFT,
+            ],
         ];
+    }
+
+    /**
+     * @test
+     * @covers ::explode
+     */
+    public function explodeWithInvalidPadType()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid $padType value provided');
+        Strings::explode('a,b,c', ',', 4, null, 'invalid');
     }
 
     /**
