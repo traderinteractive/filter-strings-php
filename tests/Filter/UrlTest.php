@@ -22,23 +22,23 @@ final class UrlTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value '1' is not a string
      * @covers ::filter
      */
     public function filterNonString()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage("Value '1' is not a string");
         Url::filter(1);
     }
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value 'www.example.com' is not a valid url
      * @covers ::filter
      */
     public function filterNotValid()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage("Value 'www.example.com' is not a valid url");
         Url::filter('www.example.com');
     }
 
@@ -53,12 +53,12 @@ final class UrlTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value failed filtering, $allowNull is set to false
      * @covers ::filter
      */
     public function filterNullFail()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage('Value failed filtering, $allowNull is set to false');
         Url::filter(null);
     }
 }
