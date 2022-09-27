@@ -57,12 +57,12 @@ final class StringsTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value failed filtering, $allowNull is set to false
      * @covers ::filter
      */
     public function filterNullFail()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage('Value failed filtering, $allowNull is set to false');
         Strings::filter(null);
     }
 
@@ -77,11 +77,11 @@ final class StringsTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
      * @covers ::filter
      */
     public function filterMinLengthFail()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
         Strings::filter('');
     }
 
@@ -96,56 +96,56 @@ final class StringsTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value 'a' with length '1' is less than '0' or greater than '0'
      * @covers ::filter
      */
     public function filterMaxLengthFail()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage("Value 'a' with length '1' is less than '0' or greater than '0'");
         Strings::filter('a', false, 0, 0);
     }
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage $minLength was not a positive integer value
      * @covers ::filter
      */
     public function filterMinLengthNotInteger()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$minLength was not a positive integer value');
         Strings::filter('a', false, -1);
     }
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage $maxLength was not a positive integer value
      * @covers ::filter
      */
     public function filterMaxLengthNotInteger()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$maxLength was not a positive integer value');
         Strings::filter('a', false, 1, -1);
     }
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage $minLength was not a positive integer value
      * @covers ::filter
      */
     public function filterMinLengthNegative()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$minLength was not a positive integer value');
         Strings::filter('a', false, -1);
     }
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage $maxLength was not a positive integer value
      * @covers ::filter
      */
     public function filterMaxLengthNegative()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('$maxLength was not a positive integer value');
         Strings::filter('a', false, 1, -1);
     }
 
@@ -184,12 +184,11 @@ final class StringsTest extends TestCase
     /**
      * @test
      * @covers ::filter
-     *
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value 'class@anonymous
      */
     public function filterWithObjectNoToStringMethod()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage("Value 'class@anonymous");
         $testObject = new class() {
             private $data;
 
@@ -215,11 +214,11 @@ final class StringsTest extends TestCase
     /**
      * @test
      * @covers ::translate
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage The value 'baz' was not found in the translation map array.
      */
     public function translateValueNotFoundInMap()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage("The value 'baz' was not found in the translation map array.");
         $map = ['foo' => '100', 'bar' => '200'];
         Strings::translate('baz', $map);
     }
@@ -248,12 +247,12 @@ final class StringsTest extends TestCase
 
     /**
      * @test
-     * @expectedException \TraderInteractive\Exceptions\FilterException
-     * @expectedExceptionMessage Value '1234' is not a string
      * @covers ::explode
      */
     public function explodeNonString()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
+        $this->expectExceptionMessage("Value '1234' is not a string");
         Strings::explode(1234, '');
     }
 
@@ -261,12 +260,12 @@ final class StringsTest extends TestCase
      * Verifies explode filter with an empty delimiter.
      *
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Delimiter '''' is not a non-empty string
      * @covers ::explode
      */
     public function explodeEmptyDelimiter()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Delimiter '''' is not a non-empty string");
         Strings::explode('test', '');
     }
 
@@ -348,12 +347,12 @@ final class StringsTest extends TestCase
      *
      * @test
      * @covers ::concat
-     * @expectedException \TraderInteractive\Exceptions\FilterException
      *
      * @return void
      */
     public function concatValueNotFilterable()
     {
+        $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
         Strings::concat(new \StdClass(), 'prefix', 'suffix');
     }
 
