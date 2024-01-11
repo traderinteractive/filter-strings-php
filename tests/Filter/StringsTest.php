@@ -188,7 +188,7 @@ final class StringsTest extends TestCase
     public function filterWithObjectNoToStringMethod()
     {
         $this->expectException(\TraderInteractive\Exceptions\FilterException::class);
-        $this->expectExceptionMessage("Value 'class@anonymous");
+        $this->expectExceptionMessageMatches("/Value '\\\\?class\@anonymous/");
         $testObject = new class() {
             private $data;
 
