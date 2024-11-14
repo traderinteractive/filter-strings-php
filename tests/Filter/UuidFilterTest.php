@@ -85,7 +85,7 @@ final class UuidFilterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(UuidFilter::UNSUPPORTED_VERSION_ERROR_FORMAT, 0));
-        UuidFilter::filter(self::UUID_V7, false, [0]);
+        UuidFilter::filter(self::UUID_V7, false, false, [0]);
     }
 
     /**
@@ -102,6 +102,28 @@ final class UuidFilterTest extends TestCase
                 implode(', ', [1,7])
             )
         );
-        UuidFilter::filter(self::UUID_V4, false, [1,7]);
+        UuidFilter::filter(self::UUID_V4, false, false, [1,7]);
+    }
+
+    /**
+     * @test
+     * @covers ::filter
+     */
+    public function filterNilUuid()
+    {
+        $value = UuidFilter::NIL_UUID;
+        $this->assertSame($value, UuidFilter::filter($value, false, true));
+    }
+
+    /**
+     * @test
+     * @covers ::filter
+     */
+    public function filterNilUuidNilNotAllowed()
+    {
+        $value = UuidFilter::NIL_UUID;
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage(sprintf(UuidFilter::NIL_NOT_ALLOWED_ERROR_FORMAT, $value));
+        UuidFilter::filter($value, false, false);
     }
 }
