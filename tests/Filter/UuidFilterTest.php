@@ -84,7 +84,7 @@ final class UuidFilterTest extends TestCase
     public function filterWithInvalidVersionSpecified()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Filter does not support UUID v0');
+        $this->expectExceptionMessage(sprintf(UuidFilter::UNSUPPORTED_VERSION_ERROR_FORMAT, 0));
         UuidFilter::filter(self::UUID_V7, false, [0]);
     }
 
