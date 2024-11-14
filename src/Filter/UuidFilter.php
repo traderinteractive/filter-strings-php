@@ -23,6 +23,16 @@ final class UuidFilter
     const FILTER_ERROR_FORMAT = "Value '%s' is not a valid UUID. Versions checked (%s)";
 
     /**
+     * @var string
+     */
+    const NULL_NOT_ALLOWED_ERROR = "Value is null, but null values are not allowed.";
+
+    /**
+     * @var string
+     */
+    const UNSUPPORTED_VERSION_ERROR_FORMAT = 'Filter does not support UUID v%d';
+
+    /**
      * @var array
      * @internal
      */
@@ -69,7 +79,7 @@ final class UuidFilter
     private static function valueIsNullAndValid(bool $allowNull, string $value = null): bool
     {
         if ($allowNull === false && $value === null) {
-            throw new FilterException('Value failed filtering, $allowNull is set to false');
+            throw new FilterException(self::NULL_NOT_ALLOWED_ERROR);
         }
 
         return $allowNull === true && $value === null;
@@ -79,7 +89,7 @@ final class UuidFilter
     {
         foreach ($versions as $version) {
             if (!in_array($version, self::VALID_UUID_VERSIONS)) {
-                throw new InvalidArgumentException("Filter does not support UUID v{$version}");
+                throw new InvalidArgumentException(sprintf(self::UNSUPPORTED_VERSION_ERROR_FORMAT, $version));
             }
         }
     }
