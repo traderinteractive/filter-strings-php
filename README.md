@@ -152,6 +152,38 @@ $value = '{ "string": "value", "array": [1, 2, 3] }';
 assert($value === ['string' => 'value', 'array' => [1, 2, 3]]);
 ```
 
+#### UuidFilter::filter
+
+This filter verifies a given string is a valid universally unique identifier.
+
+The second parameter can be set to `true` to allow null values through without an error.
+
+The third parameter can be set to `true` to allow [Nil UUIDs](https://datatracker.ietf.org/doc/html/rfc4122#section-4.1.7) values through without an error.
+
+The fourth parameter determines which UUID version the value will be validated against. By default, the filter will succeed if the values matches version 1, 2, 3, 4, 5, 6, or 7
+
+```php
+// Filtering an UUID string
+$value = '1a42403c-a29d-11ef-b864-0242ac120002';
+$filtered = \TraderInteractive\Filter\UuidFilter::filter($value);
+assert($value === $filtered);
+
+// Filtering null values
+$value = null;
+$filtered = \TraderInteractive\Filter\UuidFilter::filter($value, true);
+assert(null === $filtered);
+
+// Filtering a nil UUID
+$value = '00000000-0000-0000-0000-000000000000';
+$filtered = \TraderInteractive\Filter\UuidFilter::filter($value, false, true);
+assert($value === $filtered);
+
+// Filtering for only UUID v4
+$value = '1a42403c-a29d-41ef-b864-0242ac120002';
+$filtered = \TraderInteractive\Filter\UuidFilter::filter($value, false, false, [4]);
+assert($value === $filtered);
+```
+
 #### XmlFilter::filter
 
 This filter ensures the given string is valid XML.
