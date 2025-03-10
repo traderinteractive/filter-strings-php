@@ -89,6 +89,17 @@ $value = \TraderInteractive\Filter\Strings::redact('a string with some unwanted 
 assert($value === 'a string with some ******** *****');
 ```
 
+#### Strings::stripEmoji
+
+This filter will strip emoji, pictographs, alphanumeric supplement characters and more from a given string.
+
+The second, optional argument specifies a replacement string for the removed characters.
+
+```php
+\TraderInteractive\Filter\Strings::stripTags('🙄 this is ridiculous', ' ');
+assert($value === '  this is ridiculous');
+
+```
 #### Strings::stripTags
 
 This filter will strip HTML, XML, and PHP tags from a string. This filter also accepts null values, which will be returned as null.
