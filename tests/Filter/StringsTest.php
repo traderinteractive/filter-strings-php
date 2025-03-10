@@ -555,7 +555,7 @@ final class StringsTest extends TestCase
      * @test
      * @dataProvider provideStripEmoji
      */
-    public function stripEmoji(string $input, string $expectedValue)
+    public function stripEmoji(string $input, string $expectedValue): void
     {
         $actualValue = Strings::stripEmoji($input);
         $this->assertSame($expectedValue, $actualValue);
