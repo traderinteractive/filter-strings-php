@@ -567,6 +567,12 @@ final class StringsTest extends TestCase
     public static function provideStripEmoji(): array
     {
         return [
+            'mulitple emoji' => [
+                'input' => 'This 💩 text contains 😞 multiple emoji 🍔 characters 🍚. As well as an alphanumeric '
+                . 'supplement 🆗 and flag 🚩',
+                'expected' => 'This  text contains  multiple emoji  characters . As well as an alphanumeric '
+                . 'supplement  and flag ',
+            ],
             'emoji' => [
                 'input' => '🙄 this is ridiculous',
                 'expected' => ' this is ridiculous',
