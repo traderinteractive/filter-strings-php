@@ -182,6 +182,37 @@ final class Strings
         return strip_tags($valueWithReplacements); // use built-in as a safeguard to ensure tags are stripped
     }
 
+    /**
+     * Strip emoji character and various other pictograph characters
+     *
+     * @param string $value       The input string.
+     * @param string $replacement The string to replace the tags with. Defaults to an empty string.
+     *
+     * @return string;
+     */
+    public static function stripEmoji(string $value, string $replacement = '')
+    {
+        $alphanumericSupplement = '/[\x{1F100}-\x{1F1FF}]/u';
+        $pictographRegex = '/[\x{1F300}-\x{1F5FF}]/u';
+        $emoticonRegex = '/[\x{1F600}-\x{1F64F}]/u';
+        $transportSymbolRegex = '/[\x{1F680}-\x{1F6FF}]/u';
+        $supplementalSymbolRegex = '/[\x{1F900}-\x{1F9FF}]/u';
+        $miscSymbolsRegex = '/[\x{2600}-\x{26FF}]/u';
+        $dingbatsRegex = '/[\x{2700}-\x{27BF}]/u';
+
+        $regexPatterns = [
+            $alphanumericSupplement,
+            $pictographRegex,
+            $emoticonRegex,
+            $transportSymbolRegex,
+            $supplementalSymbolRegex,
+            $miscSymbolsRegex,
+            $dingbatsRegex,
+        ];
+
+        return preg_replace($regexPatterns, $replacement, $value);
+    }
+
     private static function validateMinimumLength(int $minLength)
     {
         if ($minLength < 0) {

@@ -548,4 +548,42 @@ final class StringsTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @param string $input         The string value to be filtered.
+     * @param string $expectedValue The expected filtered value.
+     *
+     * @test
+     * @dataProvider provideStripEmoji
+     */
+    public function stripEmoji(string $input, string $expectedValue)
+    {
+        $actualValue = Strings::stripEmoji($input);
+        $this->assertSame($expectedValue, $actualValue);
+    }
+
+    /**
+     * @return array
+     */
+    public static function provideStripEmoji(): array
+    {
+        return [
+            'emoji' => [
+                'input' => '🙄 this is ridiculous',
+                'expected' => ' this is ridiculous',
+            ],
+            'alphanumeric supplement' => [
+                'input' => 'Contains a 🆗 character',
+                'expected' => 'Contains a  character',
+            ],
+            'flag/transportation symbols' => [
+                'input' => 'Contains a 🚩 character',
+                'expected' => 'Contains a  character',
+            ],
+            'dingbat symbols' => [
+                'input' => 'Contains a ❗ character',
+                'expected' => 'Contains a  character',
+            ],
+        ];
+    }
 }
