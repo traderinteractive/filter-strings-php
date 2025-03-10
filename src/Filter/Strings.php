@@ -190,7 +190,7 @@ final class Strings
      *
      * @return string;
      */
-    public static function stripEmoji(string $value, string $replacement = '')
+    public static function stripEmoji(string $value, string $replacement = ''): string
     {
         $alphanumericSupplement = '/[\x{1F100}-\x{1F1FF}]/u';
         $pictographRegex = '/[\x{1F300}-\x{1F5FF}]/u';
