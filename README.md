@@ -96,7 +96,7 @@ This filter will strip emoji, pictographs, alphanumeric supplement characters an
 The second, optional argument specifies a replacement string for the removed characters.
 
 ```php
-\TraderInteractive\Filter\Strings::stripTags('🙄 this is ridiculous', ' ');
+\TraderInteractive\Filter\Strings::stripEmoji('🙄 this is ridiculous', ' ');
 assert($value === '  this is ridiculous');
 
 ```
