@@ -89,6 +89,18 @@ $value = \TraderInteractive\Filter\Strings::redact('a string with some unwanted 
 assert($value === 'a string with some ******** *****');
 ```
 
+#### Strings::stripControlCharacters
+
+This filter will strip all ASCII control characters, plus the delete character, including tabs and newlines. 
+It will also strip unicode invisible formatting characters, private use characters, and unused code points.
+
+The second, optional argument specifies a replacement string for the removed characters.
+
+```php
+$value = \TraderInteractive\Filter\Strings::stripControlCharacters("Hello\x00\tWorld\nTest\x7F");
+assert($value === 'HelloWorldTest');
+```
+
 #### Strings::stripEmoji
 
 This filter will strip emoji, pictographs, alphanumeric supplement characters and more from a given string.
