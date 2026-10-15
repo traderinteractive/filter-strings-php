@@ -553,6 +553,7 @@ final class StringsTest extends TestCase
      * @param string $expectedValue The expected filtered value.
      *
      * @test
+     * @covers ::stripEmoji
      * @dataProvider provideStripEmoji
      */
     public function stripEmoji(string $input, string $expectedValue): void
