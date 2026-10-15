@@ -88,6 +88,10 @@ final class Strings
             );
         }
 
+        if ($padType !== self::EXPLODE_PAD_FRONT && $padType !== self::EXPLODE_PAD_END) {
+            throw new InvalidArgumentException('Invalid $padType value provided');
+        }
+
         $values = explode($delimiter, $value);
         $padLength = $padLength ?? count($values);
         while (count($values) < $padLength) {
@@ -96,12 +100,7 @@ final class Strings
                 continue;
             }
 
-            if ($padType === self::EXPLODE_PAD_FRONT) {
-                array_unshift($values, $padValue);
-                continue;
-            }
-
-            throw new InvalidArgumentException('Invalid $padType value provided');
+            array_unshift($values, $padValue);
         }
 
         return $values;
