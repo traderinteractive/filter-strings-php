@@ -93,16 +93,19 @@ final class Strings
         }
 
         $values = explode($delimiter, $value);
-        $padLength = $padLength ?? count($values);
-        while (count($values) < $padLength) {
-            if ($padType === self::EXPLODE_PAD_END) {
-                array_push($values, $padValue);
-                continue;
-            }
-
-            array_unshift($values, $padValue);
+        $valueCount = count($values);
+        $padLength = $padLength ?? $valueCount;
+        if ($padLength <= $valueCount) {
+            return $values;
         }
 
+        $padding = array_fill(0, $padLength - $valueCount, $padValue);
+        if ($padType === self::EXPLODE_PAD_END) {
+            array_push($values, ...$padding);
+            return $values;
+        }
+
+        array_unshift($values, ...$padding);
         return $values;
     }
 
