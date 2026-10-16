@@ -224,7 +224,12 @@ final class Strings
     public static function stripControlCharacters(string $value, string $replacement = ''): string
     {
         $controlCharactersPattern = '/[\x00-\x1F\x7F\p{C}]/u';
-        return preg_replace($controlCharactersPattern, $replacement, $value);
+        $filtered = preg_replace($controlCharactersPattern, $replacement, $value);
+        if ($filtered === null) {
+            throw new FilterException("Unable to strip control characters from '{$value}'");
+        }
+
+        return $filtered;
     }
 
     private static function validateMinimumLength(int $minLength)

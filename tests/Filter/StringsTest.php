@@ -627,4 +627,16 @@ final class StringsTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @test
+     * @covers ::stripControlCharacters
+     */
+    public function stripControlCharactersNonUtf8()
+    {
+        $windows1252String = "100 \x80";
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage("Unable to strip control characters from '{$windows1252String}'");
+        Strings::stripControlCharacters($windows1252String);
+    }
 }
