@@ -223,7 +223,9 @@ final class Strings
      */
     public static function stripControlCharacters(string $value, string $replacement = ''): string
     {
-        $controlCharactersPattern = '/[\x00-\x1F\x7F\p{C}]/u';
+        $asciiControlCharacters = '\x00-\x1F\x7F';
+        $unicodeControlCharacters = '\p{C}';
+        $controlCharactersPattern = "/[{$asciiControlCharacters}{$unicodeControlCharacters}]/u";
         $filtered = preg_replace($controlCharactersPattern, $replacement, $value);
         if ($filtered === null) {
             throw new FilterException("Unable to strip control characters from '{$value}'");
