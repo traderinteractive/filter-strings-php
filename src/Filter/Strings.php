@@ -223,15 +223,8 @@ final class Strings
      */
     public static function stripControlCharacters(string $value, string $replacement = ''): string
     {
-        $allAsciiControlCharacters = '/[\x00-\x1F\x7F]/';
-        $invisibleUnicodeControlCharacters = '/[\p{C}]/u';
-
-        $regexPatterns = [
-            $allAsciiControlCharacters,
-            $invisibleUnicodeControlCharacters,
-        ];
-
-        return preg_replace($regexPatterns, $replacement, $value);
+        $controlCharactersPattern = '/[\x00-\x1F\x7F\p{C}]/u';
+        return preg_replace($controlCharactersPattern, $replacement, $value);
     }
 
     private static function validateMinimumLength(int $minLength)
