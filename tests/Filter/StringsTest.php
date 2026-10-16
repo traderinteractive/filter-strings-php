@@ -553,6 +553,7 @@ final class StringsTest extends TestCase
      * @param string $expectedValue The expected filtered value.
      *
      * @test
+     * @covers ::stripEmoji
      * @dataProvider provideStripEmoji
      */
     public function stripEmoji(string $input, string $expectedValue): void
@@ -590,5 +591,52 @@ final class StringsTest extends TestCase
                 'expected' => 'Contains a  character',
             ],
         ];
+    }
+
+    /**
+     * @param string $input         The string value to be filtered.
+     * @param string $expectedValue The expected filtered value.
+     *
+     * @test
+     * @covers ::stripControlCharacters
+     * @dataProvider provideStripControlCharacters
+     */
+    public function stripControlCharacters(string $input, string $expectedValue): void
+    {
+        $actualValue = Strings::stripControlCharacters($input);
+        $this->assertSame($expectedValue, $actualValue);
+    }
+
+    /**
+     * @return array
+     */
+    public static function provideStripControlCharacters(): array
+    {
+        return [
+            'string contains no control characters' => [
+                'input' => 'a b c',
+                'expected' => 'a b c',
+            ],
+            'Contains a null byte, tab,  newline, and delete' => [
+                'input' => "Hello\x00\tWorld\nTest\x7F",
+                'expected' => 'HelloWorldTest',
+            ],
+            'Contains a Zero-Width Space (\u{200B}) and a Soft Hyphen (\u{00AD})' => [
+                'input' => "Uni\u{200B}code\u{00AD}Text",
+                'expected' => 'UnicodeText',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @covers ::stripControlCharacters
+     */
+    public function stripControlCharactersNonUtf8()
+    {
+        $windows1252String = "100 \x80";
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage("Unable to strip control characters from '{$windows1252String}'");
+        Strings::stripControlCharacters($windows1252String);
     }
 }

@@ -213,6 +213,27 @@ final class Strings
         return preg_replace($regexPatterns, $replacement, $value);
     }
 
+    /**
+     * Strip control characters from a given string
+     *
+     * @param string $value       The input string.
+     * @param string $replacement The string to replace the tags with. Defaults to an empty string.
+     *
+     * @return string;
+     */
+    public static function stripControlCharacters(string $value, string $replacement = ''): string
+    {
+        $asciiControlCharacters = '\x00-\x1F\x7F';
+        $unicodeControlCharacters = '\p{C}';
+        $controlCharactersPattern = "/[{$asciiControlCharacters}{$unicodeControlCharacters}]/u";
+        $filtered = preg_replace($controlCharactersPattern, $replacement, $value);
+        if ($filtered === null) {
+            throw new FilterException("Unable to strip control characters from '{$value}'");
+        }
+
+        return $filtered;
+    }
+
     private static function validateMinimumLength(int $minLength)
     {
         if ($minLength < 0) {
