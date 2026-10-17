@@ -2,6 +2,7 @@
 
 namespace TraderInteractive\Filter;
 
+use InvalidArgumentException;
 use TraderInteractive\Exceptions\FilterException;
 use TypeError;
 
@@ -10,6 +11,16 @@ use TypeError;
  */
 final class Strings
 {
+    /**
+     * @var string
+     */
+    const EXPLODE_PAD_FRONT = 'front';
+
+    /**
+     * @var string
+     */
+    const EXPLODE_PAD_END = 'end';
+
     /**
      * Filter a string.
      *
@@ -52,14 +63,23 @@ final class Strings
      *
      * For example, given the string 'foo,bar,baz', this would return the array ['foo', 'bar', 'baz'].
      *
-     * @param string $value The string to explode.
-     * @param string $delimiter The non-empty delimiter to explode on.
+     * @param string     $value     The string to explode.
+     * @param string     $delimiter The non-empty delimiter to explode on.
+     * @param int|null   $padLength The number of elements to be returned in the result.
+     * @param mixed      $padValue  The value to use when padding the resulting array.
+     * @param string     $padType   Argument to specify if the resulting array should be padded on the left or right.
+     *
      * @return array The exploded values.
      *
      * @throws \InvalidArgumentException if the delimiter does not pass validation.
      */
-    public static function explode($value, string $delimiter = ',')
-    {
+    public static function explode(
+        $value,
+        string $delimiter = ',',
+        int $padLength = null,
+        $padValue = null,
+        string $padType = self::EXPLODE_PAD_END
+    ) : array {
         self::validateIfObjectIsAString($value);
 
         if (empty($delimiter)) {
@@ -68,7 +88,25 @@ final class Strings
             );
         }
 
-        return explode($delimiter, $value);
+        if ($padType !== self::EXPLODE_PAD_FRONT && $padType !== self::EXPLODE_PAD_END) {
+            throw new InvalidArgumentException('Invalid $padType value provided');
+        }
+
+        $values = explode($delimiter, $value);
+        $valueCount = count($values);
+        $padLength = $padLength ?? $valueCount;
+        if ($padLength <= $valueCount) {
+            return $values;
+        }
+
+        $padding = array_fill(0, $padLength - $valueCount, $padValue);
+        if ($padType === self::EXPLODE_PAD_END) {
+            array_push($values, ...$padding);
+            return $values;
+        }
+
+        array_unshift($values, ...$padding);
+        return $values;
     }
 
     /**

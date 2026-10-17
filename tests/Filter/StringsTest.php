@@ -224,25 +224,72 @@ final class StringsTest extends TestCase
     }
 
     /**
-     * Verifies basic explode functionality.
+     * @param string   $value          The value to be filtered.
+     * @param array    $expectedResult The expected filter result.
+     * @param string   $delimiter      The delimiter to use.
+     * @param int|null $padLength      The array length of the result.
+     * @param mixed    $padValue       The value to use when padding.
+     * @param string   $padType        The direction to pad the resulting array.
      *
      * @test
      * @covers ::explode
+     * @dataProvider provideExplodeData
      */
-    public function explode()
-    {
-        $this->assertSame(['a', 'bcd', 'e'], Strings::explode('a,bcd,e'));
+    public function explode(
+        string $value,
+        array $expectedResult,
+        string $delimiter = ',',
+        int $padLength = null,
+        $padValue = null,
+        string $padType = Strings::EXPLODE_PAD_END
+    ) {
+        $actualResult = Strings::explode($value, $delimiter, $padLength, $padValue, $padType);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * Verifies explode with a custom delimiter.
-     *
+     * @return array
+     */
+    public function provideExplodeData() : array
+    {
+        return [
+            [
+                'value' => 'a,bcd,e',
+                'result' => ['a', 'bcd', 'e'],
+            ],
+            [
+                'value' => 'a b c d,e',
+                'result' => ['a', 'b', 'c', 'd,e'],
+                'delimiter' => ' ',
+            ],
+            [
+                'value' => 'a-b-c',
+                'result' => ['a', 'b', 'c', null, null],
+                'delimiter' => '-',
+                'padLength' => 5,
+                'padValue' => null,
+                'padType' => Strings::EXPLODE_PAD_END,
+            ],
+            [
+                'value' => 'a-b-c',
+                'result' => [null, null, 'a', 'b', 'c'],
+                'delimiter' => '-',
+                'padLength' => 5,
+                'padValue' => null,
+                'padType' => Strings::EXPLODE_PAD_FRONT,
+            ],
+        ];
+    }
+
+    /**
      * @test
      * @covers ::explode
      */
-    public function explodeCustomDelimiter()
+    public function explodeWithInvalidPadType()
     {
-        $this->assertSame(['a', 'b', 'c', 'd,e'], Strings::explode('a b c d,e', ' '));
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid $padType value provided');
+        Strings::explode('a,b,c', ',', 4, null, 'invalid');
     }
 
     /**
