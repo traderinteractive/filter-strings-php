@@ -122,7 +122,7 @@ final class Strings
 
         $pattern = $replaceVerticalWhitespace ? '\s+' : '\h+';
 
-        return trim(preg_replace("/{$pattern}/u", ' ', $value));
+        return trim(preg_replace("/{$pattern}/u", ' ', $value) ?? '');
     }
 
     /**
