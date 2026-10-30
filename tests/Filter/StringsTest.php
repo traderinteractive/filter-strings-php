@@ -378,47 +378,64 @@ final class StringsTest extends TestCase
     }
 
     /**
+     * @param string|null $input          The value to filter.
+     * @param string|null $expected       The expected result.
+     * @param bool        $removeVertical Flag to remove vertical whitespace.
+     *
      * @test
      * @covers ::compress
+     * @dataProvider provideCompress
      */
-    public function compressRemovesSuperfluousWhitespace()
+    public function compress($input, $expected, bool $removeVertical)
     {
-        $this->assertSame('a compressed string', Strings::compress('  a   compressed     string    '));
+        $actual = Strings::compress($input, $removeVertical);
+        if ($expected === null) {
+            $this->assertNull($actual);
+            return;
+        }
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function provideCompress(): array
+    {
+        return [
+            'removes superfluous whitespace' => [
+                'input' => '  a   compressed     string    ',
+                'expected' => 'a compressed string',
+                'vertical' => false,
+            ],
+            'returns null if value is null' => [
+                'input' => null,
+                'expected' => null,
+                'vertical' => false,
+            ],
+            'removes newlines' => [
+                'input' => " This string\nhas     superfluous   whitespace  and  \nnewlines\n",
+                'expected' => 'This string has superfluous whitespace and newlines',
+                'vertical' => true,
+            ],
+            'ignores newlines by default' => [
+                'input' => " This string\nhas     superfluous   whitespace  and  \nnewlines\n",
+                'expected' => "This string\nhas superfluous whitespace and \nnewlines",
+                'vertical' => false,
+            ],
+        ];
     }
 
     /**
      * @test
      * @covers ::compress
      */
-    public function compressReturnsNullIfValueIsNull()
+    public function compressThrowsExceptionOnPregReplaceFailure()
     {
-        $this->assertNull(Strings::compress(null));
-    }
-
-    /**
-     * @test
-     * @covers ::compress
-     */
-    public function compressRemovesNewLines()
-    {
-        $input = " This string\nhas     superfluous   whitespace  and  \nnewlines\n";
-        $this->assertSame(
-            'This string has superfluous whitespace and newlines',
-            Strings::compress($input, true)
-        );
-    }
-
-    /**
-     * @test
-     * @covers ::compress
-     */
-    public function compressIgnoresNewLinesByDefault()
-    {
-        $input = " This string\nhas     superfluous   whitespace  and  \nnewlines\n";
-        $this->assertSame(
-            "This string\nhas superfluous whitespace and \nnewlines",
-            Strings::compress($input)
-        );
+        $input = "bad \xB1\x31 value";
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage("Unable to compress '{$input}'");
+        Strings::compress($input, true);
     }
 
     /**
