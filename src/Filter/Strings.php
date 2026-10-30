@@ -113,6 +113,8 @@ final class Strings
      *                                               single space.
      *
      * @return string|null
+     *
+     * @throws FilterException Thrown if preg_replace returns null.
      */
     public static function compress(string $value = null, bool $replaceVerticalWhitespace = false)
     {
@@ -122,7 +124,12 @@ final class Strings
 
         $pattern = $replaceVerticalWhitespace ? '\s+' : '\h+';
 
-        return trim(preg_replace("/{$pattern}/u", ' ', $value) ?? '');
+        $compressed = preg_replace("/{$pattern}/u", ' ', $value);
+        if ($compressed === null) {
+            throw new FilterException("Unable to compress '{$value}'");
+        }
+
+        return trim($compressed);
     }
 
     /**

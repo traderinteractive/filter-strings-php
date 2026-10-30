@@ -423,12 +423,19 @@ final class StringsTest extends TestCase
                 'expected' => "This string\nhas superfluous whitespace and \nnewlines",
                 'vertical' => false,
             ],
-            'returns empty string on preg_replace error' => [
-                'input' => "bad \xB1\x31 value",
-                'expected' => '',
-                'vertical' => true,
-            ],
         ];
+    }
+
+    /**
+     * @test
+     * @covers ::compress
+     */
+    public function compressThrowsExceptionOnPregReplaceFailure()
+    {
+        $input = "bad \xB1\x31 value";
+        $this->expectException(FilterException::class);
+        $this->expectExceptionMessage("Unable to compress '{$input}'");
+        Strings::compress($input, true);
     }
 
     /**
