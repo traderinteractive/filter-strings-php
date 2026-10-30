@@ -423,6 +423,11 @@ final class StringsTest extends TestCase
                 'expected' => "This string\nhas superfluous whitespace and \nnewlines",
                 'vertical' => false,
             ],
+            'returns null on preg_replace error' => [
+                'input' => "bad \xB1\x31 value",
+                'expected' => '',
+                'vertical' => true,
+            ],
         ];
     }
 
